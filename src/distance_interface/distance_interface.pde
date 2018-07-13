@@ -17,11 +17,12 @@ void setup() {
   size(800, 600);
   background(0);
   printArray(Serial.list());
-  port = new Serial(this, Serial.list()[0], 9600);
-  textSize(100);
-  loadFont("LucidaSansUnicode-48.vlw");
-}
-
+  port = new Serial(this, Serial.list()[0], 9600); // Serial.list()[0] is the first COM port thats find by the Serial. list function,
+  textSize(100);                                   // it ussually is the one that is connected to Arduino, if you have your Arduino pluged in
+  loadFont("LucidaSansUnicode-48.vlw");            // and the program dosn't show anything (not even the down left corner watermark) or if it crashes
+}                                                  // it probably means that the COM port isn't the right one, in that case you should check
+                                                   // on which COM is your Arduino then comment line 19 and replace Serial.list()[0] in line 20
+                                                   // for "COMx" (x beign your COM port number)
 void draw() {
   while (port.available() > 0) { // While there is incoming data in the serial port (measured in bytes)
   serialData = port.readStringUntil(10); //Read the Serial Input until ASCII 10 (new line)
