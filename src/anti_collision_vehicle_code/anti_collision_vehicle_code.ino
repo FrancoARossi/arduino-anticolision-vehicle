@@ -33,7 +33,11 @@ void setup()
 void loop()
 {
   word pos = ultraSonicRead();
-  Serial.println(pos);
+  if (pos <= 400){
+    Serial.println(pos);
+  } else {
+    Serial.println(410);
+  }
 	if (pos <= 23)
 	{
 		stay();
