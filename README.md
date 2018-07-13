@@ -5,4 +5,5 @@ My first Arduino project, the main purpose's to learn. It will be updated as I w
 # Soon
 
 - Schematics
-- Bluetooth / Infrared
+- Bluetooth / Infrared Control
+- Interfacing (Software)
