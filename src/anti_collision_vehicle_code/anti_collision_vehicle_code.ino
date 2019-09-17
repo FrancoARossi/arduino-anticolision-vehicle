@@ -14,12 +14,11 @@ byte scan(void);
 void rightTurn(void);
 void leftTurn(void);
 void forward(void);
-void stay(void);
+void stop(void);
 
 Servo scanServo;
 
-void setup()
-{
+void setup() {
 	pinMode(IN1, OUTPUT);
 	pinMode(IN2, OUTPUT);
 	pinMode(IN3, OUTPUT);
@@ -30,32 +29,26 @@ void setup()
 	scanServo.attach(SERV);
 }
 
-void loop()
-{
+void loop() {
   word pos = ultraSonicRead();
-  if (pos <= 400){
+  if (pos <= 400) {
     Serial.println(pos);
   } else {
     Serial.println(410);
   }
-	if (pos <= 23)
-	{
-		stay();
-		switch (scan())
-		{
+	if (pos <= 30) {
+		stop();
+		switch (scan()) {
 			case 0 : rightTurn(); break;
 			case 1 : leftTurn(); break;
 		}
 		forward();
-	}
-	else
-	{
+	} else {
 		forward();
 	}
 }
 
-word ultraSonicRead(void)
-{
+word ultraSonicRead(void) {
 	word distance = 0;
 	digitalWrite(TRIG, LOW);
 	delayMicroseconds(2);
@@ -67,54 +60,51 @@ word ultraSonicRead(void)
 	return distance;
 }
 
-void forward(void)
-{
+void forward(void) {
 	digitalWrite(IN1, HIGH);
 	digitalWrite(IN2, LOW);
 	digitalWrite(IN3, HIGH);
 	digitalWrite(IN4, LOW);
 }
 
-void stay(void)
-{
+void stop(void) {
 	digitalWrite(IN1, LOW);
 	digitalWrite(IN2, LOW);
 	digitalWrite(IN3, LOW);
 	digitalWrite(IN4, LOW);
 }
 
-void rightTurn(void)
-{
+void rightTurn(void) {
 	digitalWrite(IN1, HIGH);
 	digitalWrite(IN2, LOW);
 	digitalWrite(IN3, LOW);
 	digitalWrite(IN4, LOW);
 }
 
-void leftTurn(void)
-{
+void leftTurn(void) {
 	digitalWrite(IN1, LOW);
 	digitalWrite(IN2, LOW);
 	digitalWrite(IN3, HIGH);
 	digitalWrite(IN4, LOW);
 }
 
-byte scan(void)
-{
-	scanServo.write(90);
-	delay(175);
-	word leftDistance = ultraSonicRead();
-	scanServo.write(-90);
-	delay(350);
-	word rightDistance = ultraSonicRead();
-	scanServo.write(0);
-	delay(175);
-	if (rightDistance >= leftDistance)
-	{
-		return 0;
+byte scan(void) {
+	for(int pos; pos < 90; pos++) {
+		scanServo.write(pos);
 	}
-	else
-	{
+	word leftDistance = ultraSonicRead();
+
+	for(int pos; pos > -90; pos--) {
+		scanServo.write(pos);
+	}
+	word rightDistance = ultraSonicRead();
+
+	for(int pos; pos < 0; pos++) {
+		scanServo.write(pos);
+	}
+	if (rightDistance >= leftDistance) {
+		return 0;
+	} else {
 		return 1;
 	}
 }
